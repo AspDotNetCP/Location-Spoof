@@ -5,6 +5,8 @@
         public App()
         {
             InitializeComponent();
+
+            Routing.RegisterRoute(nameof(CountryDetailPage), typeof(CountryDetailPage));
         }
 
         protected override Window CreateWindow(IActivationState? activationState)

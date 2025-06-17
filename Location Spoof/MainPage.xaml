@@ -14,12 +14,14 @@
                 Aspect="AspectFit"
                 SemanticProperties.Description="dot net bot in a hovercraft number nine" />
 
-            <CollectionView ItemsSource="{Binding CountryList}">
+            <CollectionView ItemsSource="{Binding CountryList}"
+                        SelectionMode="Single"
+                        SelectionChanged="OnCountrySelected">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <HorizontalStackLayout Spacing="10" Padding="5">
-                            <Image Source="{Binding FlagImage}" WidthRequest="40" HeightRequest="30" />
-                            <Label Text="{Binding Name}" VerticalOptions="Center" FontSize="18" />
+                        <HorizontalStackLayout Padding="5" Spacing="10">
+                            <Image Source="{Binding FlagImage}" WidthRequest="40" HeightRequest="30" Aspect="AspectFit"/>
+                            <Label Text="{Binding Name}" FontSize="18" VerticalOptions="Center" />
                         </HorizontalStackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

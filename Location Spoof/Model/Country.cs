@@ -9,8 +9,11 @@ namespace Location_Spoof.Model
     public class Country
     {
         public string Name { get; set; }
-        public string CountryCode { get; set; }  // e.g. "MY"
-        public string FlagImage => $"https://flagsapi.com/{CountryCode}/flat/64.png";
+        public string CountryCode { get; set; }
+        public string FlagImage { get; set; }
+
+        public string GoogleMapLink => $"https://www.google.com/maps/search/?api=1&query={Uri.EscapeDataString(Name)}";
     }
+
 
 }

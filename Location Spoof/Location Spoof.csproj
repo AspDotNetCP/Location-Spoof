@@ -76,9 +76,20 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Raw\countries_cache.json" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="12.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.70" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="CountryDetailPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>
