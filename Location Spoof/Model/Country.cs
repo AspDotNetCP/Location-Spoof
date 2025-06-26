@@ -10,7 +10,9 @@ namespace Location_Spoof.Model
     {
         public string Name { get; set; }
         public string CountryCode { get; set; }
-        public string FlagImage { get; set; }
+
+        public ImageSource FlagImage { get; set; }
+
 
         public string GoogleMapLink => $"https://www.google.com/maps/search/?api=1&query={Uri.EscapeDataString(Name)}";
     }

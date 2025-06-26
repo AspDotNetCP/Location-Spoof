@@ -21,13 +21,15 @@ namespace Location_Spoof
             InitializeComponent();
         }
 
-        private void LoadData()
+        private async void LoadData()
         {
             if (SelectedCountry == null) return;
 
             CountryNameLabel.Text = SelectedCountry.Name;
             CountryCodeLabel.Text = $"Code: {SelectedCountry.CountryCode}";
             FlagImage.Source = SelectedCountry.FlagImage;
+            await DisplayAlert("Success", $"LoadData", "OK");
+
         }
 
         private async void OnViewMapClicked(object sender, EventArgs e)

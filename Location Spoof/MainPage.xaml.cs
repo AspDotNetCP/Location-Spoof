@@ -1,59 +1,68 @@
-﻿using Location_Spoof.Model;
-using Location_Spoof.ViewModels;
+﻿using Location_Spoof.ViewModels;
 
 namespace Location_Spoof
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
-        private MainPageViewModel viewModel;
+        private readonly MainPageViewModel viewModel;
+        private int count = 0;
 
         public MainPage()
         {
             InitializeComponent();
             viewModel = new MainPageViewModel();
             BindingContext = viewModel;
-
-#if WINDOWS
-                var vm = new MainPageViewModel();
-                _ = vm.LoadCountriesFromApiAsync();
-#endif
-
         }
 
-        private void OnCounterClicked(object? sender, EventArgs e)
+        protected override async void OnAppearing()
         {
-            count++;
+            base.OnAppearing();
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
-        }
-
-        private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            viewModel.SearchCountries(e.NewTextValue);
-        }
-
-        private async void OnCountrySelected(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.CurrentSelection.FirstOrDefault() is Country selected)
+            try
             {
-                await Shell.Current.GoToAsync(nameof(CountryDetailPage), true, new Dictionary<string, object>
+#if ANDROID
+                var permissionStatus = await RequestStoragePermissionsAsync();
+                if (permissionStatus == PermissionStatus.Granted)
                 {
-                    { "SelectedCountry", selected }
-                });
-
-                ((CollectionView)sender).SelectedItem = null;
+                    // Proceed with storage operations
+                    await viewModel.InitializeAsync();
+                }
+                else
+                {
+                    await DisplayAlert("Permission Denied", "Cannot proceed without storage access.", "OK");
+                }
+#else
+                // For platforms that don’t need permission
+                await viewModel.InitializeAsync();
+#endif
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Failed to load data: {ex.Message}", "OK");
             }
         }
 
-        private async void OnLocationClicked(object? sender, EventArgs e)
+        private async Task<PermissionStatus> RequestStoragePermissionsAsync()
         {
-            //await Shell.Current.GoToAsync(nameof(LocationPage));
+            try
+            {
+                var status = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
+                if (status != PermissionStatus.Granted)
+                {
+                    status = await Permissions.RequestAsync<Permissions.StorageWrite>();
+                    if (status != PermissionStatus.Granted)
+                    {
+                        await DisplayAlert("Error", "Storage permission is required to save flag images.", "OK");
+                    }
+                }
+                return status;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error: {e.Message}");
+                throw;
+            }
+            
         }
     }
 }
